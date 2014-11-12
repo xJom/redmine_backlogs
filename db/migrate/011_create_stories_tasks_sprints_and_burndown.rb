@@ -2,7 +2,9 @@ class CreateStoriesTasksSprintsAndBurndown < ActiveRecord::Migration
   def self.up
     add_column :issues, :position, :integer
     add_column :issues, :story_points, :integer
-    add_column :issues, :remaining_hours, :float
+    unless column_exists? :issues, :remaining_hours
+        add_column :issues, :remaining_hours, :float
+    end
 
     add_column :versions, :sprint_start_date, :date, :null => true
 
@@ -26,7 +28,7 @@ class CreateStoriesTasksSprintsAndBurndown < ActiveRecord::Migration
   def self.down
     remove_column :issues, :position
     remove_column :issues, :story_points
-    remove_column :issues, :remaining_hours
+    #remove_column :issues, :remaining_hours
 
     remove_column :versions, :sprint_start_date
 
