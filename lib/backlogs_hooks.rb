@@ -90,8 +90,8 @@ module BacklogsPlugin
 
           project = context[:project]
 
+          snippet += "<tr><th>#{l(:field_story_points)}</th><td>#{RbStory.find(issue.id).points_display}</td>"
           if issue.is_story?
-            snippet += "<tr><th>#{l(:field_story_points)}</th><td>#{RbStory.find(issue.id).points_display}</td>"
             unless issue.remaining_hours.nil?
               snippet += "<th>#{l(:field_remaining_hours)}</th><td>#{l_hours(issue.remaining_hours)}</td>"
             end
@@ -131,15 +131,16 @@ module BacklogsPlugin
           #developers = select_tag("time_entry[user_id]", options_from_collection_for_select(developers, :id, :name, User.current.id))
           #developers = developers.gsub(/\n/, '')
 
+          snippet += '<p>'
+          #snippet += context[:form].label(:story_points)
+          if Backlogs.setting[:story_points].blank?
+            snippet += context[:form].text_field(:story_points, :size => 3)
+          else
+            snippet += context[:form].select(:story_points, options_for_select(Backlogs.setting[:story_points].split(',').map(&:to_f), issue.story_points.try(:to_f).try(:to_s)), include_blank: true)
+          end
+          snippet += '</p>'
+            
           if issue.is_story?
-            snippet += '<p>'
-            #snippet += context[:form].label(:story_points)
-            if Backlogs.setting[:story_points].blank?
-              snippet += context[:form].text_field(:story_points, :size => 3)
-            else
-              snippet += context[:form].select(:story_points, options_for_select(Backlogs.setting[:story_points].split(',').map(&:to_f), issue.story_points.try(:to_f).try(:to_s)), include_blank: true)
-            end
-            snippet += '</p>'
 
             if issue.safe_attribute?('release_id') && issue.assignable_releases.any?
               snippet += '<div class="splitcontentleft"><p>'
