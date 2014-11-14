@@ -107,9 +107,9 @@ module BacklogsPlugin
             end
           end
 
-          if issue.is_task? && User.current.allowed_to?(:update_remaining_hours, project) != nil
-            snippet += "<tr><th>#{l(:field_remaining_hours)}</th><td>#{issue.remaining_hours}</td></tr>"
-          end
+#          if issue.is_task? && User.current.allowed_to?(:update_remaining_hours, project) != nil
+#            snippet += "<tr><th>#{l(:field_remaining_hours)}</th><td>#{issue.remaining_hours}</td></tr>"
+#          end
 
           return snippet
         rescue => e
@@ -179,11 +179,11 @@ module BacklogsPlugin
             snippet += "#{radio_button_tag('copy_tasks', 'all:' + params[:copy_from], false)} #{l(:rb_label_copy_tasks_all)}</p>"
           end
 
-          if issue.is_task? && !issue.new_record?
-            snippet += "<p><label for='remaining_hours'>#{l(:field_remaining_hours)}</label>"
-            snippet += text_field_tag('remaining_hours', issue.remaining_hours, :size => 3)
-            snippet += '</p>'
-          end
+#          if issue.is_task? && !issue.new_record?
+#            snippet += "<p><label for='remaining_hours'>#{l(:field_remaining_hours)}</label>"
+#            snippet += text_field_tag('remaining_hours', issue.remaining_hours, :size => 3)
+#            snippet += '</p>'
+#          end
 
           return snippet
         rescue => e
