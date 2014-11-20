@@ -154,7 +154,7 @@ See RB.Taskboard.initialize()
 .story.closed .subject{
   text-decoration:line-through;
 }
-.story .story_points.editable{
+.story .story_points.editable, .issue .story_points.editable{
   -moz-border-radius:15px 15px 15px 15px;
   -webkit-border-radius:15px 15px 15px 15px;
   border-radius:15px 15px 15px 15px;
@@ -162,9 +162,16 @@ See RB.Taskboard.initialize()
   background-color:#FF8800;
   color:#FFFFFF;
   position:absolute;
+}
+.story .story_points.editable{
   padding:1em;
   bottom:-5px;
   right:-5px;
+}
+.issue .story_points.editable{
+    padding: 3px 5px;
+    top: 0px;
+    left: 0px;  
 }
 .story .story_points.editable:empty{
   display:none;
