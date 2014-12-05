@@ -173,7 +173,7 @@ See RB.Taskboard.initialize()
     top: 0px;
     left: 0px;  
 }
-.story .story_points.editable:empty{
+.story .story_points.editable:empty, .issue .story_points.editable:empty{
   display:none;
 }
 
