@@ -155,6 +155,10 @@ filter:progid:DXImageTransform.Microsoft.Gradient(Enabled=1,GradientType=0,Start
     item.remaining_hours.blank? || item.remaining_hours==0 ? "" : item.remaining_hours
   end
 
+  def story_points_or_empty(item)
+    item.story_points.blank? || item.story_points==0 ? "" : item.story_points
+  end
+
   def workdays(start_day, end_day)
     return (start_day .. end_day).select {|d| (d.wday > 0 and d.wday < 6) }
   end
