@@ -69,13 +69,12 @@
 <%- content_for :main do %>
 <span id="userid" style="visibility:hidden;"><%= User.current.id %></span>
 <div id="taskboard">
-
-
+    
   <table id="board_header" cellspacing="0">
     <tr>
-      <td><%= l(:backlogs_story) %></td>
+        <td><%= l(:backlogs_story) %> <span class="story_points"><%= @sprint.stories.sum(:story_points) %></span></td>
       <%- @statuses.each do |status| %>
-      <td class="swimlane"><%= h status.name %></td>
+      <td class="swimlane"><%= h status.name %> <span class="story_points"><%= RbTask.includes('parent').where(:status_id => status.id, :parents_issues => { :fixed_version_id => @sprint.id } ).sum(:story_points) %></span></td>
       <%- end %>
     </tr>
   </table>

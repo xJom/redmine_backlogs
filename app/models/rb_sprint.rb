@@ -4,7 +4,7 @@ class RbSprint < Version
   unloadable
 
   validate :start_and_end_dates
-
+  
   def start_and_end_dates
     errors.add(:base, "sprint_end_before_start") if self.effective_date && self.sprint_start_date && self.sprint_start_date >= self.effective_date
   end

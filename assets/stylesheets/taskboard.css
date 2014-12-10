@@ -176,7 +176,16 @@ See RB.Taskboard.initialize()
 .story .story_points.editable:empty, .issue .story_points.editable:empty{
   display:none;
 }
-
+#board_header .story_points {
+  -moz-border-radius:15px 15px 15px 15px;
+  -webkit-border-radius:15px 15px 15px 15px;
+  border-radius:15px 15px 15px 15px;
+  border:2px solid #FFFFFF;
+  background-color:#FF8800;
+  color:#FFFFFF;
+  padding: 3px 5px;
+  font-weight: normal;
+}
 /* item styles used by .task and .impediment */
 #taskboard .issue, #taskboard .placeholder{
   background-color:#CCCCCC;
