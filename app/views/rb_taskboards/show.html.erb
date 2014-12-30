@@ -57,6 +57,21 @@
 </span>
 <%- end %>
 
+<%- content_for :view_specific_sprint do %>
+<span id="sprintselect">
+<ul style="list-style:none; margin:0px">
+  <li><label>
+    <select class="sprintfilter" name="filter-sprint-selection" title="Sprint selection">
+      <% @project.open_shared_sprints.each do |sprint| %>
+        <option value="<%= sprint.id %>" <% if @sprint.id==sprint.id %>selected="selected"<% end %>> <%= sprint.name %></option>
+      <% end %>
+      </select>
+  </label></li>
+</ul>
+<br style="clear:both" />
+</span>
+<%- end %>
+
 <%- content_for :view_specific_links do %>
   <% if @sprint.has_burndown? %>
     <a id='show_charts'><%= l(:label_burndown) %></a>

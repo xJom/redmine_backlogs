@@ -34,7 +34,7 @@ RB.$(function() {
 
   /* private mode/userfilter dropdown*/
   RB.UserFilter.initialize();
-
+  RB.SprintFilter.initialize();
 });
 
 RB.showCharts = function(event){
