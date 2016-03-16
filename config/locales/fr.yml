@@ -174,6 +174,8 @@ fr:
   label_task_board: "Tableau des tâches"
   label_view_options: "Options d'affichage"
   label_webcal: "Fil Calendrier Web"
+  label_show_empty_stories: "Voir les scénario vides"
+  label_show_closed_stories: "Voir les scénario fermés"
   rb_auto_refresh: "Auto-Rafraichir carnets/tableau des tâches (seconds)"
   rb_burndown_timezone: "Fuseau horaire pour le calcul de Burndown"
   rb_burndown_timezone_explanation: |-
