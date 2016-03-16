@@ -173,6 +173,7 @@ module BacklogsPlugin
 
             snippet += "<p><label>#{l(:rb_label_copy_tasks)}</label>"
             snippet += "#{radio_button_tag('copy_tasks', 'open:' + params[:copy_from], true)} #{l(:rb_label_copy_tasks_open)}<br />"
+            snippet += "#{radio_button_tag('copy_tasks', 'closed:' + params[:copy_from], false)} #{l(:rb_label_copy_tasks_closed)}<br />"
             snippet += "#{radio_button_tag('copy_tasks', 'none', false)} #{l(:rb_label_copy_tasks_none)}<br />"
             snippet += "#{radio_button_tag('copy_tasks', 'all:' + params[:copy_from], false)} #{l(:rb_label_copy_tasks_all)}</p>"
           end
@@ -336,6 +337,8 @@ module BacklogsPlugin
               case action
                 when 'open'
                   tasks = story.tasks.select{|t| !t.reload.closed?}
+                when 'closed'
+                  tasks = story.tasks.reject{|t| !t.reload.closed?}
                 when 'none'
                   tasks = []
                 when 'all'
@@ -351,6 +354,9 @@ module BacklogsPlugin
                 nt.position = nil # will assign a new position
                 nt.save!
               }
+
+              # In case the new story only has closed tasks, make sure it is closed.
+              context[:issue].becomes(RbStory).story_follow_task_state
             end
           end
         end
