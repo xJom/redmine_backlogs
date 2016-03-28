@@ -69,6 +69,11 @@ class RbSprint < Version
     return stories.inject(0){|sum, story| sum + story.story_points.to_i}
   end
 
+  # Returns users currently assigned to any Issue in this Sprint
+  def assigned_users
+    Issue.where(:fixed_version_id => self).includes(:assigned_to).map(&:assigned_to).uniq.compact
+  end
+
   def has_wiki_page
     return false if wiki_page_title.blank?
 
