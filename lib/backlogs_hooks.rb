@@ -364,8 +364,7 @@ module BacklogsPlugin
                   # We also skip validation, otherwise we would get a "parent
                   # task is invalid" error.
                   #
-                  t.parent_issue_id = issue.id
-                  t.save(:validate => false)
+                  t.reload.update_attribute(:parent_issue_id, issue.id)
                 }
               else
                 tasks.each {|t|
