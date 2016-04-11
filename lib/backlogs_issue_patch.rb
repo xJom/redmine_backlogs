@@ -73,7 +73,8 @@ module Backlogs
               @rb_story = parent.story
             end
           else
-            @rb_story = Issue.find(:first, :order => 'lft DESC', :conditions => [ "root_id = ? and lft < ? and rgt > ? and tracker_id in (?)", root_id, lft, rgt, RbStory.trackers ])
+            @rb_story = Issue.where("root_id = ? and lft < ? and rgt > ? and tracker_id in (?)", root_id, lft, rgt, RbStory.trackers)
+			                 .order('lft DESC').first
             @rb_story = @rb_story.becomes(RbStory) if @rb_story
           end
         end
