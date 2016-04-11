@@ -40,7 +40,8 @@ RB.$(function(){
   /* provide the possibility to collapse the redmine header */
   RB.$('#usability-compat-wrapper').bind('dblclick', function(e,u){
     RB.$('#usability-compat-wrapper').toggleClass('w-rb-header-collapsed');
-  });
+    RB.UserPreferences.set('rb_header_collapsed', RB.$('#usability-compat-wrapper').hasClass('w-rb-header-collapsed'));
+    });
 });
 </script>
 <% end %>
@@ -50,7 +51,7 @@ RB.$(function(){
 <div id="wrapper2">
 <div id="wrapper3">
 <% if Backlogs.setting[:show_redmine_std_header] %>
-<div id="usability-compat-wrapper">
+  <div id="usability-compat-wrapper" class="<%= 'w-rb-header-collapsed' if @header_collapsed == 'true' %>">
 <div id="top-menu" title="Doubleclick to collapse">
     <div id="account">
         <%= render_menu :account_menu -%>
@@ -107,6 +108,9 @@ RB.$(function(){
         <% end %>
         <div class="userselect">
           <%= yield :view_specific_users -%>
+        </div>
+        <div class="sprintselect">
+          <%= yield :view_specific_sprint -%>
         </div>
         <div class="links">
           <%= yield :view_specific_links -%>

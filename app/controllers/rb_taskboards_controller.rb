@@ -45,6 +45,7 @@ class RbTaskboardsController < RbApplicationController
                             .order("updated_on DESC").first
     end
 
+    @header_collapsed = cookies[:rb_header_collapsed]
     respond_to do |format|
       format.html { render :layout => "rb" }
     end

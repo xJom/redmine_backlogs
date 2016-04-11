@@ -19,6 +19,7 @@ class RbMasterBacklogsController < RbApplicationController
       @release_backlogs.map{|r| r[:releases]}
       ].flatten.compact.map{|s| s.updated_on}.sort.last
 
+    @header_collapsed = cookies[:rb_header_collapsed]
     respond_to do |format|
       format.html { render :layout => "rb"}
     end

@@ -9,6 +9,8 @@ module Backlogs
       base.class_eval do
         unloadable
 
+        alias_method_chain :recalculate_attributes_for, :story_points
+        
         belongs_to :release, :class_name => 'RbRelease', :foreign_key => 'release_id'
 
         acts_as_list_with_gaps :default => (Backlogs.setting[:new_story_position] == 'bottom' ? 'bottom' : 'top')
@@ -71,8 +73,7 @@ module Backlogs
               @rb_story = parent.story
             end
           else
-            @rb_story = Issue.where("root_id = ? and lft < ? and rgt > ? and tracker_id in (?)", root_id, lft, rgt, RbStory.trackers)
-                              .order('lft DESC').first
+            @rb_story = Issue.find(:first, :order => 'lft DESC', :conditions => [ "root_id = ? and lft < ? and rgt > ? and tracker_id in (?)", root_id, lft, rgt, RbStory.trackers ])
             @rb_story = @rb_story.becomes(RbStory) if @rb_story
           end
         end
@@ -177,8 +178,8 @@ module Backlogs
                                             or
                                             (tracker_id <> ?)
                                           )", self.root_id, self.lft, self.rgt,
-                                              self.fixed_version_id, self.fixed_version_id,
-                                              self.fixed_version_id, self.fixed_version_id,
+              self.fixed_version_id, self.fixed_version_id,
+              self.fixed_version_id, self.fixed_version_id,
                                               RbTask.tracker).all.to_a
           tasklist.each{|task| task.history.save! }
           if tasklist.size > 0
@@ -190,19 +191,29 @@ module Backlogs
         end
       end
 
+      def recalculate_attributes_for_with_story_points(issue_id)
+        if issue_id && p = Issue.find_by_id(issue_id)
+          # story points = sum of leaves story points
+          p.story_points = p.leaves.sum(:story_points).to_f
+          p.story_points = nil if p.story_points == 0.0
+          p.save(:validate => false)
+        end
+        recalculate_attributes_for_without_story_points(issue_id)
+      end
+    
       def assignable_releases
-        project.shared_releases
+        project.shared_releases.open
       end
 
       def release_id=(rid)
         self.release = nil
         write_attribute(:release_id, rid)
       end
-#      def self.by_version(project)
-#        count_and_group_by(:project => project,
-#                           :field => 'release_id',
-#                           :joins => RbRelease.table_name)
-#      end
+      #      def self.by_version(project)
+      #        count_and_group_by(:project => project,
+      #                           :field => 'release_id',
+      #                           :joins => RbRelease.table_name)
+      #      end
 
 
     end

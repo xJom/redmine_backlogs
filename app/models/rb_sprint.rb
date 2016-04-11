@@ -4,7 +4,7 @@ class RbSprint < Version
   unloadable
 
   validate :start_and_end_dates
-
+  
   def start_and_end_dates
     errors.add(:base, "sprint_end_before_start") if self.effective_date && self.sprint_start_date && self.sprint_start_date >= self.effective_date
   end
@@ -53,6 +53,11 @@ class RbSprint < Version
 
   def points
     return stories.inject(0){|sum, story| sum + story.story_points.to_i}
+  end
+
+  # Returns users currently assigned to any Issue in this Sprint
+  def assigned_users
+    Issue.where(:fixed_version_id => self).includes(:assigned_to).map(&:assigned_to).uniq.compact
   end
 
   def has_wiki_page

@@ -207,7 +207,21 @@ RB.Taskboard = RB.Object.create({
     RB.$(".swimlane").width(this.colWidthUnit * w).css('min-width', this.colWidthUnit * w);
   }
 });
-
+RB.SprintFilter = RB.Object.create({
+    initialize: function() {
+    var me = this,
+      _ = RB.constants.locale._;
+    me.el = RB.$(".sprintfilter");
+    me.el.multiselect({
+      header: false,
+      multiple: false,
+      selectedList: 2,
+      click: function(event, ui) {
+          document.location.href = "/rb/taskboards/" + ui.value;
+      }
+    });
+  }
+});
 RB.UserFilter = RB.Object.create({
   initialize: function() {
     var me = this,

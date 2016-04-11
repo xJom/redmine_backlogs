@@ -43,13 +43,28 @@
 <ul style="list-style:none; margin:0px">
   <li><label>
     <select class="userfilter" size="5" name="filter-user-selection" multiple="multiple" title="User selection">
-      <option value='s'>Show empty Stories</option>
-      <option value='c'>Show closed Stories</option>
+      <option value='s'><%= l(:label_show_empty_stories) %></option>
+      <option value='c'><%= l(:label_show_closed_stories) %></option>
       <optgroup label="Users">
-      <% @project.assignable_users.sort.each do |member| %>
+      <% @sprint.assigned_users.sort.each do |member| %>
         <option value="<%= member.id %>"> <%= member.name %></option>
       <% end %>
       </optgroup>
+      </select>
+  </label></li>
+</ul>
+<br style="clear:both" />
+</span>
+<%- end %>
+
+<%- content_for :view_specific_sprint do %>
+<span id="sprintselect">
+<ul style="list-style:none; margin:0px">
+  <li><label>
+    <select class="sprintfilter" name="filter-sprint-selection" title="Sprint selection">
+      <% @project.open_shared_sprints.each do |sprint| %>
+        <option value="<%= sprint.id %>" <% if @sprint.id==sprint.id %>selected="selected"<% end %>> <%= sprint.name %></option>
+      <% end %>
       </select>
   </label></li>
 </ul>
@@ -71,13 +86,12 @@
 <%- content_for :main do %>
 <span id="userid" style="visibility:hidden;"><%= User.current.id %></span>
 <div id="taskboard">
-
-
+    
   <table id="board_header" cellspacing="0">
     <tr>
-      <td><%= l(:backlogs_story) %></td>
+        <td><%= l(:backlogs_story) %> <span class="story_points"><%= @sprint.stories.sum(:story_points) %></span></td>
       <%- @statuses.each do |status| %>
-      <td class="swimlane"><%= h status.name %></td>
+      <td class="swimlane"><%= h status.name %> <span class="story_points"><%= RbTask.includes('parent').where(:status_id => status.id, :parents_issues => { :fixed_version_id => @sprint.id } ).sum(:story_points) %></span></td>
       <%- end %>
     </tr>
   </table>

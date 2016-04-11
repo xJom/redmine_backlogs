@@ -106,7 +106,7 @@ RB.Model = RB.Object.create({
                            changeYear: true,
                            closeText: 'Close',
                            dateFormat: 'yy-mm-dd', 
-                           firstDay: 1,
+                           firstDay: 0,
                            onClose: function(){ RB.$(this).focus(); },
                            selectOtherMonths: true,
                            showAnim:'',
