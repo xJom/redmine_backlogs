@@ -365,6 +365,19 @@ module BacklogsPlugin
                   # task is invalid" error.
                   #
                   t.reload.update_attribute(:parent_issue_id, issue.id)
+
+                  #
+                  # If "link to original" is set, add links for all subtasks that
+                  # were moved, so that the original ticket retains relations to
+                  # all of them.
+                  #
+                  if params[:link_to_original]
+                    task_rel = IssueRelation.new
+                    task_rel.issue_from_id = id # relate from the original Story
+                    task_rel.issue_to_id = t.id # to the moved Task
+                    task_rel.relation_type = IssueRelation::TYPE_RELATES
+                    task_rel.save
+                  end
                 }
               else
                 tasks.each {|t|
