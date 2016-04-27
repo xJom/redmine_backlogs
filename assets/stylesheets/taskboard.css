@@ -145,6 +145,14 @@ See RB.Taskboard.initialize()
   padding:2px;
   width:186px;
 }
+.story .tracker_name {
+  bottom: 0;
+  float:left;
+}
+.story .info {
+  bottom: 0;
+  float:right;
+}
 .story .project {
   text-align:left;
 }

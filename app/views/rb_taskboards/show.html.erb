@@ -140,6 +140,8 @@
               <span class="v"><%= story.project.id %></span>
             </div>
           <%- end %>
+          <div class="trackername"><%= story.tracker.name %> </span>
+          <div class="info"><%= info_or_empty(story) %> </span>
           <div class="story_points editable" fieldname="story_points" fieldlabel="<%=l(:field_story_points)%>"><%= story.story_points %></div>
         </div>
       </td>

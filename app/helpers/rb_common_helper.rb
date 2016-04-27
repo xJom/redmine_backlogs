@@ -89,6 +89,11 @@ filter:progid:DXImageTransform.Microsoft.Gradient(Enabled=1,GradientType=0,Start
   def release_or_empty(story)
     story.release_id.nil? ? "" : RbRelease.find(story.release_id).name
   end
+  
+  def info_or_empty(story)
+  # TODO: The selection of custom field should be configurable!
+    story.custom_field_value(4)
+  end
 
   def sprint_status_id_or_default(sprint)
     sprint.new_record? ? Version::VERSION_STATUSES.first : sprint.status
