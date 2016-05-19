@@ -281,6 +281,7 @@ ul li { vertical-align: bottom; } /* close IE7 gap between list items */
 
 /* backlog header name,dates etc.*/
 /*#backlogs_container .header .headertext > div */
+.header .project,
 .header .name,
 .header .velocity,
 .header .date{
@@ -288,6 +289,12 @@ ul li { vertical-align: bottom; } /* close IE7 gap between list items */
   line-height:28px;
   white-space: nowrap;
   font-size:12px;
+}
+
+#backlogs_container .header .project{
+  float:left;
+  font-size:medium;
+  vertical-align: middle;
 }
 
 /* backlog header*/
@@ -477,6 +484,7 @@ ul li { vertical-align: bottom; } /* close IE7 gap between list items */
 #sprint_editor .description{
   height:65px;
 }
+
 /* In-place Sprint Editor */
 #backlogs_container .header .editing .editors{
   display:block;
@@ -501,6 +509,7 @@ ul li { vertical-align: bottom; } /* close IE7 gap between list items */
 #backlogs_container .header .editing .release_start_date.editor,
 #backlogs_container .header .editing .effective_date.editor,
 #backlogs_container .header .editing .sprint_start_date.editor,
+
 #backlogs_container .header .editing .name.editor{
   float: left;
   position: relative;
@@ -509,6 +518,7 @@ ul li { vertical-align: bottom; } /* close IE7 gap between list items */
   margin-right: 4px;
 }
 #backlogs_container .header .editing .name.editor{
+  float: right;
   height:23px;
   line-height:15px;
 }
