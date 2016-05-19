@@ -282,7 +282,11 @@ $.widget("ech.multiselect", {
 
 				// check all / uncheck all
 				} else {
-					self[ $(this).hasClass('ui-multiselect-all') ? 'checkAll' : 'uncheckAll' ]();
+					if( $(this).hasClass('ui-multiselect-all') ) {
+                                            self.checkAll();
+                                        } else {
+                                             self.uncheckAll();
+                                        }
 				}
 
 				e.preventDefault();

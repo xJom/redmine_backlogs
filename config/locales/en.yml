@@ -125,7 +125,7 @@ en:
   label_column_width: "Column width"
   label_download_sprint: Download
   label_filter_tasks: "Filter by user"
-  label_filter_tasks_my_tasks: "Filter by user - my tasks"
+  label_filter_tasks_select_user: "Filter by user - select user"
   label_hide_completed_sprints: "Hide Completed Sprints"
   label_hours: hours
   label_hours_remaining: "remaining hours"
@@ -133,7 +133,7 @@ en:
   label_ideal: ideal
   label_impediments: Impediments
   label_master_backlog: "Master Backlog"
-  label_my_tasks: "My tasks"
+  label_no_tasks: "None"
   label_new_sprint: "New Sprint"
   label_new_story: "New Story"
   label_no_data_to_show: "No data to show"
