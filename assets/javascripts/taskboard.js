@@ -229,9 +229,9 @@ RB.UserFilter = RB.Object.create({
     me.el = RB.$(".userfilter");
     me.el.multiselect({
       selectedText: _("Filter tasks"),
-      noneSelectedText: _("Filter tasks: my tasks"),
+      noneSelectedText: _("Filter tasks: select user"),
       checkAllText: _("All tasks"),
-      uncheckAllText: _("My tasks"),
+      uncheckAllText: _("None"),
       checkAll: function() { me.updateUI(); },
       uncheckAll: function() { me.onUnCheckAll(); },
       click: function() { me.updateUI(); }
@@ -241,8 +241,6 @@ RB.UserFilter = RB.Object.create({
 
   /* uncheck all users but check the current user, so we get a private mode button */
   onUnCheckAll: function() {
-    var uid = RB.$("#userid").text();
-    this.el.multiselect("widget").find(":checkbox[value='"+uid+"']").each(function() {this.checked = true;} );
     this.updateUI();
   },
 
