@@ -1,0 +1,1 @@
+This hardcodes the extra info, from custom_field_value, put on the Story ticket, in rb_common_helper.rb - use carefully!
