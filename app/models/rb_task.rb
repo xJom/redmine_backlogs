@@ -3,16 +3,44 @@ require 'date'
 class RbTask < Issue
   unloadable
 
-  def self.tracker
-    task_tracker = Backlogs.setting[:task_tracker]
-    return nil if task_tracker.blank?
-    return Integer(task_tracker)
+  def self.class_default_status
+    begin
+      return RbTask.trackers(:trackers)[0].default_status
+    rescue => e
+      Rails.logger.error("Task has no trackers configured #{e}")
+      puts("Task has no trackers configured #{e}")
+      nil
+    end
+  end
+
+  def self.trackers_include?(tracker_id)
+    tracker_ids = Backlogs.setting[:task_trackers] || []
+    tracker_ids = tracker_ids.map(&:to_i)
+    tracker_ids.include?(tracker_id.to_i)
   end
 
   # unify api between story and task. FIXME: remove this when merging to tracker-free-tasks
   # required for RbServerVariablesHelper.workflow_transitions
-  def self.trackers
-    [self.tracker]
+  def self.trackers(options = {})
+    options = {:type => options} if options.is_a?(Symbol)
+
+    # somewhere early in the initialization process during first-time migration this gets called when the table doesn't yet exist
+    trackers = Backlogs.setting[:task_trackers]
+
+    begin
+      trackers = Tracker.where(id: trackers)
+    rescue ActiveRecord::RecordNotFound => e
+      trackers = nil
+    end
+    trackers = trackers & options[:project].trackers if options[:project]
+    trackers = trackers.sort_by { |t| [t.position] }
+
+    case options[:type]
+      when :trackers    then return trackers
+      when :array, nil  then return trackers.collect{|t| t.id}
+      when :string      then return trackers.collect{|t| t.id.to_s}.join(',')
+      else                   raise "Unexpected return type #{options[:type].inspect}"
+    end
   end
 
   def self.rb_safe_attributes(params)
@@ -34,7 +62,7 @@ class RbTask < Issue
     attribs = rb_safe_attributes(params)
 
     attribs['author_id'] = user_id
-    attribs['tracker_id'] = RbTask.tracker
+    attribs['tracker_id'] = Backlogs.setting[:default_task_tracker]
     attribs['project_id'] = project_id
 
     blocks = params.delete('blocks')
@@ -68,16 +96,19 @@ class RbTask < Issue
   # TODO: there's an assumption here that impediments always have the
   # task-tracker as their tracker, and are top-level issues.
   def self.find_all_updated_since(since, project_id, find_impediments = false, sprint_id = nil)
-    #find all updated visible on taskboard - which may span projects.
-    if sprint_id.nil?
-      find(:all,
-           :conditions => ["project_id = ? AND updated_on > ? AND tracker_id in (?) and parent_id IS #{ find_impediments ? '' : 'NOT' } NULL", project_id, Time.parse(since), tracker],
-           :order => "updated_on ASC")
-    else
-      find(:all,
-           :conditions => ["fixed_version_id = ? AND updated_on > ? AND tracker_id in (?) and parent_id IS #{ find_impediments ? '' : 'NOT' } NULL", sprint_id, Time.parse(since), tracker],
-           :order => "updated_on ASC")
+    #find all updated visible on taskboard - which may span projects. This returns a Relation/scope
+
+    if sprint_id.nil? #FIXME this branch makes no sense, we are on a taskboard which may be sharing across projects
+      Rails.logger.warn("DEPRECATION WARNING: RbTask.find_all_updated_since used without sprint")
+      scope = where(:project_id => project_id)
+    else #this should be the only branch here.
+      scope = where(:fixed_version_id => sprint_id)
     end
+    scope.where(["updated_on > ?
+                  AND tracker_id in (?)
+                  AND parent_id IS #{ find_impediments ? '' : 'NOT' } NULL",
+                 Time.parse(since), tracker]).
+        order("updated_on ASC")
   end
 
   def update_with_relationships(params, is_impediment = false)
@@ -122,11 +153,11 @@ class RbTask < Issue
 
   def update_blocked_list(for_blocking)
     # Existing relationships not in for_blocking should be removed from the 'blocks' list
-    relations_from.find(:all, :conditions => "relation_type='blocks'").each{ |ir|
+    relations_from.where(relation_type: 'blocks').find_each{ |ir|
       ir.destroy unless for_blocking.include?( ir[:issue_to_id] )
     }
 
-    already_blocking = relations_from.find(:all, :conditions => "relation_type='blocks'").map{|ir| ir.issue_to_id}
+    already_blocking = relations_from.where(relation_type: 'blocks').map{|ir| ir.issue_to_id}
 
     # Non-existing relationships that are in for_blocking should be added to the 'blocks' list
     for_blocking.select{ |id| !already_blocking.include?(id) }.each{ |id|

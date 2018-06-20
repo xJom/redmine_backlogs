@@ -9,6 +9,7 @@ else
   # object_to_prepare = config
 end
 object_to_prepare.to_prepare do
+  require_dependency 'backlogs_redmine3nestedset_mixin'
   require_dependency 'backlogs_activerecord_mixin'
   require_dependency 'backlogs_setup'
   require_dependency 'issue'
@@ -32,6 +33,7 @@ object_to_prepare.to_prepare do
   require_dependency 'backlogs_project_patch'
   require_dependency 'backlogs_user_patch'
   require_dependency 'backlogs_custom_field_patch'
+  require_dependency 'backlogs_query_patch'
 
   require_dependency 'backlogs_my_controller_patch'
   require_dependency 'backlogs_issues_controller_patch'
@@ -49,15 +51,16 @@ end
 
 
 Redmine::Plugin.register :redmine_backlogs do
-  name 'Redmine Backlogs'
-  author "friflaj,Mark Maglana,John Yani,mikoto20000,Frank Blendinger,Bo Hansen,stevel,Patrick Atamaniuk"
+  name 'Redmine Backlogs Fork (Allow multiple task trackers)'
+  author "friflaj,Mark Maglana,John Yani,mikoto20000,Frank Blendinger,Bo Hansen,stevel,Patrick Atamaniuk, fukachi"
   description 'A plugin for agile teams'
-  version 'v1.0.6'
+  version 'v1.1.0'
 
   settings :default => {
                          :story_trackers            => nil,
                          :default_story_tracker     => nil,
-                         :task_tracker              => nil,
+                         :task_trackers             => nil,
+                         :default_task_trackers     => nil,
                          :card_spec                 => nil,
                          :story_close_status_id     => '0',
                          :taskboard_card_order      => 'story_follows_tasks',
@@ -66,7 +69,9 @@ Redmine::Plugin.register :redmine_backlogs do
                          :show_project_name         => nil,
                          :scrum_stats_menu_position => 'top',
                          :show_redmine_std_header   => 'enabled',
-                         :show_priority             => nil
+                         :show_priority             => nil,
+                         :task_story_on_taskboard   => nil,
+                         :show_tags                 => nil
                        },
            :partial => 'backlogs/settings'
 
@@ -158,10 +163,10 @@ Redmine::Plugin.register :redmine_backlogs do
       User.current.allowed_to?({:controller => :rb_all_projects, :action => :statistics}, nil, :global => true) &&
       (Backlogs.setting[:scrum_stats_menu_position].nil? || Backlogs.setting[:scrum_stats_menu_position] == 'top')
     }
-  menu :application_menu, :rb_statistics, { :controller => :rb_all_projects, :action => :statistics}, :caption => :label_scrum_statistics,
-    :if => Proc.new { 
-      Backlogs.configured? &&
-      User.current.allowed_to?({:controller => :rb_all_projects, :action => :statistics}, nil, :global => true) &&
-      Backlogs.setting[:scrum_stats_menu_position] == 'application'
-    }
+  # menu :application_menu, :rb_statistics, { :controller => :rb_all_projects, :action => :statistics}, :caption => :label_scrum_statistics,
+  #   :if => Proc.new { 
+  #     Backlogs.configured? &&
+  #     User.current.allowed_to?({:controller => :rb_all_projects, :action => :statistics}, nil, :global => true) &&
+  #     Backlogs.setting[:scrum_stats_menu_position] == 'application'
+  #   }
 end
