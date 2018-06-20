@@ -51,10 +51,10 @@ end
 
 
 Redmine::Plugin.register :redmine_backlogs do
-  name 'Redmine Backlogs'
-  author "friflaj,Mark Maglana,John Yani,mikoto20000,Frank Blendinger,Bo Hansen,stevel,Patrick Atamaniuk"
+  name 'Redmine Backlogs Fork (Allow multiple task trackers)'
+  author "friflaj,Mark Maglana,John Yani,mikoto20000,Frank Blendinger,Bo Hansen,stevel,Patrick Atamaniuk, fukachi"
   description 'A plugin for agile teams'
-  version 'v1.0.6'
+  version 'v1.1.0'
 
   settings :default => {
                          :story_trackers            => nil,

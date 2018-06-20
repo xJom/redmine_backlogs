@@ -4,6 +4,12 @@ REDMINE BACKLOGS
 A Redmine plugin for agile teams. For more information,
 please visit https://backlogs.github.io/www/
 
+* Note it is the original website and version info does not match.
+* Fork that combines Redmine 3.4 and multiple tasks
+* Operation is confirmed with Redmine 3.4.6.
+* Probably not supported before 3.3. (unconfirmed)
+
+
 PROJECT HEALTH
 --------------
 
