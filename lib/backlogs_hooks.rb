@@ -196,6 +196,9 @@ module BacklogsPlugin
         #Remove the copy_subtasks functionality from redmine 2.1+ since backlogs offers it with a choice to copy only open tasks
         project = context[:project]
         return '' unless project.module_enabled?('backlogs')
+        #When task has parent-child relationship, copy option of child is modified to be displayed (Since the backlog option is only for a story) 
+        issue = context[:issue]
+        return '' unless issue.is_story?
         return '<script type="text/javascript">$(function(){try{$("#copy_subtasks")[0].checked=false;$($("#copy_subtasks")[0].parentNode).hide();}catch(e){}});</script>' if (Redmine::VERSION::MAJOR == 2 && Redmine::VERSION::MINOR >= 1) || Redmine::VERSION::MAJOR > 2
       end
 
