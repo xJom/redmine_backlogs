@@ -21,6 +21,12 @@ RB.Taskboard = RB.Object.create({
     self.updateColWidths();
     RB.$("#col_width input").bind('keyup', function(e){ if(e.which==13) self.updateColWidths(); });
 
+    self.updateScrollBar();
+    $(window).on("resize", $.proxy(self.updateScrollBar, this));
+    $(window).on("scroll", $.proxy(self.updateScrollBar, this));
+    RB.$("#taskboard_wbar").on('scroll', $.proxy(self.updateScrollBar, this));
+
+
     //initialize mouse handling for drop handling
     j.bind('mousedown.taskboard', function(e) { return self.onMouseDown(e); });
     j.bind('mouseup.taskboard', function(e) { return self.onMouseUp(e); });
@@ -205,7 +211,22 @@ RB.Taskboard = RB.Object.create({
     RB.$("#col_width input").val(w);
     RB.UserPreferences.set('taskboardColWidth', w);
     RB.$(".swimlane").width(this.colWidthUnit * w).css('min-width', this.colWidthUnit * w);
+  },
+
+  updateScrollBar: function(){
+    var w = RB.$("#board_header").width();
+    RB.$("#taskboard_wbar_width").width(w);
+    RB.$("#taskboard_wbar_width").height(1);
+    var box = RB.$("#taskboard")[0].getBoundingClientRect();
+    if (box.bottom > window.innerHeight) {
+      RB.$("#taskboard_wbar").css({position: "fixed", bottom: "0", width: $(window).width(), left: "0px"});
+    } else {
+      RB.$("#taskboard_wbar").css({position: "relative", bottom: "", width: $(window).width(), left: $(window).scrollLeft()});
+    }
+    RB.$("#board_scroll").css({left: -RB.$("#taskboard_wbar").scrollLeft()+$(window).scrollLeft()});
   }
+
+
 });
 
 RB.UserFilter = RB.Object.create({
