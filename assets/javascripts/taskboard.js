@@ -224,6 +224,16 @@ RB.Taskboard = RB.Object.create({
       RB.$("#taskboard_wbar").css({position: "relative", bottom: "", width: $(window).width(), left: $(window).scrollLeft()});
     }
     RB.$("#board_scroll").css({left: -RB.$("#taskboard_wbar").scrollLeft()+$(window).scrollLeft()});
+
+    var initialOffsetTop =  parseInt( RB.$("#taskboard").offset().top );
+    var pageScroll =  parseInt( $( window ).scrollTop() );
+    if ( initialOffsetTop >= ( pageScroll ) ) {
+      RB.$("#board_header").css({position: "absolute", top: RB.$("#board_header").initialTop, left: "0px"});
+    } else {
+      RB.$("#board_header").css({position: 'fixed', top: "0px", left: -RB.$("#taskboard_wbar").scrollLeft()});
+    }
+
+
   }
 
 
