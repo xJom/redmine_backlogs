@@ -217,8 +217,8 @@ RB.Taskboard = RB.Object.create({
     var w = RB.$("#board_header").width();
     RB.$("#taskboard_wbar_width").width(w);
     RB.$("#taskboard_wbar_width").height(1);
-    var box = RB.$("#taskboard")[0].getBoundingClientRect();
-    if (box.bottom > window.innerHeight) {
+    var box = RB.$("#board_scroll")[0].getBoundingClientRect();
+    if (box.bottom + RB.$("#taskboard_wbar").height() > window.innerHeight) {
       RB.$("#taskboard_wbar").css({position: "fixed", bottom: "0", width: $(window).width(), left: "0px"});
     } else {
       RB.$("#taskboard_wbar").css({position: "relative", bottom: "", width: $(window).width(), left: $(window).scrollLeft()});
@@ -232,8 +232,6 @@ RB.Taskboard = RB.Object.create({
     } else {
       RB.$("#board_header").css({position: 'fixed', top: "0px", left: -RB.$("#taskboard_wbar").scrollLeft()});
     }
-
-
   }
 
 
