@@ -6,20 +6,11 @@ version_file = IO.read(redmine_version_file)
 redmine_version_minor = version_file.match(/MINOR =/).post_match.match(/\d/)[0].to_i
 redmine_version_major = version_file.match(/MAJOR =/).post_match.match(/\d/)[0].to_i
 
-chiliproject_file = File.dirname(__FILE__) + "/lib/chili_project.rb"
-chiliproject = File.file?(chiliproject_file)
-
-deps = Hash.new
-@dependencies.map{|dep| deps[dep.name] = dep }
-rails3 = Gem::Dependency.new('rails', '~>3.0')
-RAILS_VERSION_IS_3 = rails3 =~ deps['rails']
-
 gem "holidays", "~>1.0.3"
 gem "icalendar"
 gem "open-uri-cached"
 gem "prawn"
 gem 'json'
-gem "system_timer" if RUBY_VERSION =~ /^1\.8\./ && RUBY_PLATFORM =~ /darwin|linux/
 
 group :development do
   gem "inifile"
@@ -37,11 +28,11 @@ group :test do
   gem "poltergeist"
   gem "database_cleaner"
   gem "gherkin"
-  gem "rspec"
-  gem "rspec-rails"
+  gem "rspec", '~> 3.0.0'
+  gem "rspec-rails", '~> 3.0.1'
   gem "ruby-prof", :platforms => [:ruby]
   gem "spork"
-  gem "test-unit", "=1.2.3" if RUBY_VERSION >= "1.9" and ENV['IN_RBL_TESTENV'] == 'true'
+  gem "test-unit", "=1.2.3"
   gem "timecop", '~> 0.3.5'
 end
 
