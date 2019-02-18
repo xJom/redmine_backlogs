@@ -1,5 +1,3 @@
-source 'https://rubygems.org'
-
 redmine_version_file = File.expand_path("../../../lib/redmine/version.rb",__FILE__)
 if (!File.exists? redmine_version_file)
   redmine_version_file = File.expand_path("lib/redmine/version.rb");
@@ -18,7 +16,6 @@ RAILS_VERSION_IS_3 = rails3 =~ deps['rails']
 
 gem "holidays", "~>1.0.3"
 gem "icalendar"
-gem "nokogiri", ">=1.6.7.2"
 gem "open-uri-cached"
 gem "prawn"
 gem 'json'
@@ -32,42 +29,16 @@ group :test do
   gem 'chronic'
   gem 'ZenTest', "=4.5.0" # 4.6.0 has a nasty bug that breaks autotest
   gem 'autotest-rails'
-  if RAILS_VERSION_IS_3
-    unless chiliproject
-      gem 'capybara', ">= 1" if ENV['IN_RBL_TESTENV'] == 'true' # redmine 2.3 conflicts
-      gem "faye-websocket", "~>0.4.7"
-      gem "poltergeist"
-    end
-    gem 'cucumber-rails', :require => false
-    gem "culerity"
-  else
-    unless chiliproject
-      gem "capybara", ">=1"
-      gem "poltergeist"
-    end
-    gem "cucumber"
-    gem 'cucumber-rails2', "~> 0.3.5"
-    gem "culerity"
-  end
+  #gem 'cucumber-rails', '~>1.4.0', require: false
+  gem 'cucumber-rails', require: false
+  gem "culerity"
+  gem "cucumber"
+  #gem "faye-websocket"
+  gem "poltergeist"
   gem "database_cleaner"
-  if RAILS_VERSION_IS_3
-    gem "gherkin"
-  else
-    gem "gherkin"
-  end
-  gem "redgreen" if RUBY_VERSION < "1.9"
-  if RAILS_VERSION_IS_3
-    gem "rspec", "~> 2.0"
-    gem "rspec-rails"
-  else
-    gem "rspec", "~> 2.0"
-    gem "rspec-rails"
-  end
-  if RUBY_VERSION >= "1.9"
-    gem "simplecov", "~> 0.9.1"
-  else
-    gem "rcov",  "=0.9.11"
-  end
+  gem "gherkin"
+  gem "rspec"
+  gem "rspec-rails"
   gem "ruby-prof", :platforms => [:ruby]
   gem "spork"
   gem "test-unit", "=1.2.3" if RUBY_VERSION >= "1.9" and ENV['IN_RBL_TESTENV'] == 'true'
@@ -75,5 +46,3 @@ group :test do
 end
 
 # moved out of the dev group so backlogs can be tested by the user after install. Too many issues of weird setups with apache, nginx, etc.
-# thin doesn't work for jruby
-gem "thin", :platforms => [:ruby]

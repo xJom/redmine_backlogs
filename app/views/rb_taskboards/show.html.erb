@@ -87,6 +87,7 @@
 <span id="userid" style="visibility:hidden;"><%= User.current.id %></span>
 <div id="taskboard">
     
+  <div id="board_scroll" style="position: relative;">
   <table id="board_header" cellspacing="0">
     <tr>
         <td><%= l(:backlogs_story) %> <span class="story_points"><%= @sprint.stories.sum(:story_points) %></span></td>

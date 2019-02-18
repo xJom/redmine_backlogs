@@ -19,9 +19,9 @@ class OrderTasksUsingTree < ActiveRecord::Migration
     end
 
     last_task = {}
-    if RbTask.tracker
+    if RbTask.trackers.size > 0
       ActiveRecord::Base.transaction do
-        RbTask.where(tracker_id: RbTask.tracker).order("project_id ASC, parent_id ASC, position ASC").find_each do |t|
+        RbTask.where(tracker_id: RbTask.trackers).order("project_id ASC, parent_id ASC, position ASC").find_each do |t|
           begin
             t.move_after last_task[t.parent_id] if last_task[t.parent_id]
           rescue

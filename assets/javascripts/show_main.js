@@ -28,9 +28,9 @@ RB.$(function() {
   });
 
   /* make taskbord swimlane header floating */
-  RB.$("#board_header").verticalFix({
-    delay: 50
-  });
+//  RB.$("#board_header").verticalFix({
+//    delay: 50
+//  });
 
   /* private mode/userfilter dropdown*/
   RB.UserFilter.initialize();
